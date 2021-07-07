@@ -6,3 +6,4 @@
 - `disk` - [Disk operations in real-mode](disk/disk.md)
 - `stage2` - [2 stages boot](stage2/stage2.md)
 - `pmode` - [Protected mode](pmode/pmode.md)
+- `bootc` - [Boot to C](bootc/bootc.md)
