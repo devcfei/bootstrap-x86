@@ -25,7 +25,7 @@
 - `stage2` - [2 stages boot](stage2/stage2.md) (Done)
 - `pmode` - [Protected mode](pmode/pmode.md) (Done)
 - `bootc` - [Boot to C](bootc/bootc.md) (Done)
-- `exception` - [IDT and exception](#) (Planning)
+- `exception` - [IDT and exception](exception/exception.md) (WIP)
 - `interrupt` - [IDT and interrupt](#) (Planning)
 - `task` - [TR, TSS and task](#) (Planning)
 - `lmode` - [Long mode](#) (Planning)
