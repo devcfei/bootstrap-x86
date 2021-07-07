@@ -52,8 +52,8 @@ DESC_SG_VIDEO:
 DESC_SG_STACK:
 	dd 0x00007A00	; Base: 0x00000000, Length 0x7a00
 	dd 0x00409600  
-GDT_END:  
-  
+GDT_END:
+
 ;Selector
 	SLCT_NULL	equ DESC_SG_NULL - GDT_START  
 	SLCT_CODE	equ DESC_SG_CODE - GDT_START  
@@ -72,9 +72,9 @@ start:
 	mov sp, 0x7C00  
 
 
-    call screenClean
+	call screenClean
 
-    push 0000h
+	push 0000h
 	call cursorMove
 	add sp, 2
 
@@ -151,17 +151,17 @@ printString:
 	push bp
 	mov bp, sp
 	pusha
-	mov si, [bp+4]	 	; grab the pointer to the data
-	mov bh, 00h	        ; page number, 0 again
-	mov bl, 00h		    ; foreground color, irrelevant - in text mode
-	mov ah, 0Eh  		; print character to TTY
+	mov si, [bp+4]		; grab the pointer to the data
+	mov bh, 00h			; page number, 0 again
+	mov bl, 00h			; foreground color, irrelevant - in text mode
+	mov ah, 0Eh			; print character to TTY
  .char:
-	mov al, [si]   		; get the current char from our pointer position
-	add si, 1		    ; keep incrementing si until we see a null char
+	mov al, [si]		; get the current char from our pointer position
+	add si, 1			; keep incrementing si until we see a null char
 	or al, 0
-	je .return        	; end if the string is done
-	int 10h         	; print the character if we're not done
-	jmp .char	  	    ; keep looping
+	je .return			; end if the string is done
+	int 10h				; print the character if we're not done
+	jmp .char			; keep looping
  .return:
 	popa
 	mov sp, bp
@@ -171,14 +171,14 @@ printString:
 [bits 32]  
 pm32_start:
 	; Set data segment
-	mov eax, SLCT_VIDEO 
+	mov eax, SLCT_VIDEO
 	mov ds, eax  
 	
-	mov ebx, msgPmode-0x7C00  
+	mov ebx, msgPmode-0x7C00
 	mov esi, 0  
 	mov edi, 160  
 .lp:    
-	mov al, [cs: ebx+esi]  
+	mov al, [cs: ebx+esi]
 	test al, al
 	je .end
 	mov ah, 0x2	; set Green

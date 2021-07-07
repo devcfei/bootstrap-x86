@@ -140,8 +140,8 @@ start:
 CleanScreen:
 	mov ah, 07h		; tells BIOS to scroll down window
 	mov al, 00h		; clear entire window
-    mov bh, 07h    	; white on black
-	mov cx, 00h  	; specifies top left of screen as (0,0)
+    mov bh, 07h		; white on black
+	mov cx, 00h		; specifies top left of screen as (0,0)
 	mov dh, 18h		; 18h = 24 rows of chars
 	mov dl, 4fh		; 4fh = 79 cols of chars
 	int 10h			; calls video interrupt
@@ -172,7 +172,7 @@ SectorWrite:
 	mov dh, 0		; Disk heads
 	mov ch, 0		; Disk cylinders
 	mov cl, 3		; Sector number
-	mov ah, 3  		; Write
+	mov ah, 3		; Write
 	int 13h
 	ret
 
@@ -183,48 +183,48 @@ mmap_ent:
 	dw 0xfafa
 
 do_e820:
-	xor ebx, ebx		; ebx must be 0 to start
-	xor bp, bp		; keep an entry count in bp
-	mov edx, 0x0534D4150	; Place "SMAP" into edx
+	xor ebx, ebx				; ebx must be 0 to start
+	xor bp, bp					; keep an entry count in bp
+	mov edx, 0x0534D4150		; Place "SMAP" into edx
 	mov eax, 0xe820
 	mov [es:di + 20], dword 1	; force a valid ACPI 3.X entry
-	mov ecx, 24		; ask for 24 bytes
+	mov ecx, 24					; ask for 24 bytes
 	int 0x15
-	jc short .failed	; carry set on first call means "unsupported function"
-	mov edx, 0x0534D4150	; Some BIOSes apparently trash this register?
-	cmp eax, edx		; on success, eax must have been reset to "SMAP"
+	jc short .failed			; carry set on first call means "unsupported function"
+	mov edx, 0x0534D4150		; Some BIOSes apparently trash this register?
+	cmp eax, edx				; on success, eax must have been reset to "SMAP"
 	jne short .failed
-	test ebx, ebx		; ebx = 0 implies list is only 1 entry long (worthless)
+	test ebx, ebx				; ebx = 0 implies list is only 1 entry long (worthless)
 	je short .failed
 	jmp short .jmpin
 .e820lp:
-	mov eax, 0xe820		; eax, ecx get trashed on every int 0x15 call
+	mov eax, 0xe820				; eax, ecx get trashed on every int 0x15 call
 	mov [es:di + 20], dword 1	; force a valid ACPI 3.X entry
-	mov ecx, 24		; ask for 24 bytes again
+	mov ecx, 24					; ask for 24 bytes again
 	int 0x15
-	jc short .e820f		; carry set means "end of list already reached"
-	mov edx, 0x0534D4150	; repair potentially trashed register
+	jc short .e820f				; carry set means "end of list already reached"
+	mov edx, 0x0534D4150		; repair potentially trashed register
 .jmpin:
-	jcxz .skipent		; skip any 0 length entries
-	cmp cl, 20		; got a 24 byte ACPI 3.X response?
+	jcxz .skipent				; skip any 0 length entries
+	cmp cl, 20					; got a 24 byte ACPI 3.X response?
 	jbe short .notext
 	test byte [es:di + 20], 1	; if so: is the "ignore this data" bit clear?
 	je short .skipent
 .notext:
-	mov ecx, [es:di + 8]	; get lower uint32_t of memory region length
-	or ecx, [es:di + 12]	; "or" it with upper uint32_t to test for zero
-	jz .skipent		; if length uint64_t is 0, skip entry
-	inc bp			; got a good entry: ++count, move to next storage spot
+	mov ecx, [es:di + 8]		; get lower uint32_t of memory region length
+	or ecx, [es:di + 12]		; "or" it with upper uint32_t to test for zero
+	jz .skipent					; if length uint64_t is 0, skip entry
+	inc bp						; got a good entry: ++count, move to next storage spot
 	add di, 24
 .skipent:
-	test ebx, ebx		; if ebx resets to 0, list is complete
+	test ebx, ebx				; if ebx resets to 0, list is complete
 	jne short .e820lp
 .e820f:
-	mov [mmap_ent], bp	; store the entry count
-	clc			; there is "jc" on end of list to this point, so the carry must be cleared
+	mov [mmap_ent], bp			; store the entry count
+	clc							; there is "jc" on end of list to this point, so the carry must be cleared
 	ret
 .failed:
-	stc			; "function unsupported" error exit
+	stc							; "function unsupported" error exit
 	ret
 
 

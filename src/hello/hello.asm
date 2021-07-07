@@ -18,8 +18,8 @@ screenClean:
 
 	mov ah, 07h		; tells BIOS to scroll down window
 	mov al, 00h		; clear entire window
-	mov bh, 07h    	; white on black
-	mov cx, 00h  	; specifies top left of screen as (0,0)
+	mov bh, 07h		; white on black
+	mov cx, 00h		; specifies top left of screen as (0,0)
 	mov dh, 18h		; 18h = 24 rows of chars
 	mov dl, 4fh		; 4fh = 79 cols of chars
 	int 10h			; calls video interrupt
