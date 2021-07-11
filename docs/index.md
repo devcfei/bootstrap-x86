@@ -36,3 +36,6 @@
 - `call, ret` - [call, ret](instructions/call-ret.md)
 
 
+## Debug skills
+
+- `disassemble` - [Disassemble](disassemble.md)
