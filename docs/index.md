@@ -29,3 +29,10 @@
 - `interrupt` - [IDT and interrupt](interrupt/interrupt.md) (Done)
 - `task` - [TR, TSS and task](#) (Planning)
 - `lmode` - [Long mode](#) (Planning)
+
+
+## Instructions practice
+
+- `call, ret` - [call, ret](instructions/call-ret.md)
+
+
